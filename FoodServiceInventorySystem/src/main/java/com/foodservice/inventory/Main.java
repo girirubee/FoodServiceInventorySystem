@@ -1,10 +1,10 @@
 package com.foodservice.inventory;
 
-import com.foodservice.inventory.database.Database;
-import com.foodservice.inventory.gui.LoginFrame;
-
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+
+import com.foodservice.inventory.database.Database;
+import com.foodservice.inventory.gui.LoginFrame;
 
 public final class Main {
 
@@ -28,4 +28,4 @@ public final class Main {
         });
     }
 }
-///
+
