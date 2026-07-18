@@ -1,0 +1,10 @@
+com\foodservice\inventory\gui\DashboardFrame.class
+com\foodservice\inventory\database\Database.class
+com\foodservice\inventory\Main.class
+com\foodservice\inventory\gui\MainFrame$1.class
+com\foodservice\inventory\gui\LoginFrame.class
+com\foodservice\inventory\dao\InventoryDAO.class
+com\foodservice\inventory\gui\MainFrame.class
+com\foodservice\inventory\gui\InventoryTableModel.class
+com\foodservice\inventory\gui\ItemDialog.class
+com\foodservice\inventory\model\InventoryItem.class

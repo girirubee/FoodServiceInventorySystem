@@ -1,0 +1,12 @@
+package com.foodservice.inventory.dao;
+import com.foodservice.inventory.database.Database;
+import com.foodservice.inventory.model.InventoryItem;
+import java.sql.*; import java.util.*;
+public class InventoryDAO {
+  public List<InventoryItem> findAll(String text, boolean lowOnly){List<InventoryItem> list=new ArrayList<>();String sql="SELECT * FROM inventory_items WHERE (name LIKE ? OR category LIKE ? OR supplier LIKE ?)"+(lowOnly?" AND quantity<=minimum_stock":"")+" ORDER BY name";try(Connection c=Database.getConnection();PreparedStatement p=c.prepareStatement(sql)){String q="%"+(text==null?"":text.trim())+"%";p.setString(1,q);p.setString(2,q);p.setString(3,q);try(ResultSet r=p.executeQuery()){while(r.next())list.add(map(r));}}catch(SQLException e){throw new RuntimeException("Unable to load inventory.",e);}return list;}
+  public void insert(InventoryItem i){String sql="INSERT INTO inventory_items(name,category,quantity,unit,supplier,unit_price,expiration_date,minimum_stock) VALUES(?,?,?,?,?,?,?,?)";try(Connection c=Database.getConnection();PreparedStatement p=c.prepareStatement(sql)){set(p,i);p.executeUpdate();}catch(SQLException e){throw new RuntimeException("Unable to add item.",e);}}
+  public void update(InventoryItem i){String sql="UPDATE inventory_items SET name=?,category=?,quantity=?,unit=?,supplier=?,unit_price=?,expiration_date=?,minimum_stock=? WHERE id=?";try(Connection c=Database.getConnection();PreparedStatement p=c.prepareStatement(sql)){set(p,i);p.setInt(9,i.getId());p.executeUpdate();}catch(SQLException e){throw new RuntimeException("Unable to update item.",e);}}
+  public void delete(int id){try(Connection c=Database.getConnection();PreparedStatement p=c.prepareStatement("DELETE FROM inventory_items WHERE id=?")){p.setInt(1,id);p.executeUpdate();}catch(SQLException e){throw new RuntimeException("Unable to delete item.",e);}}
+  private void set(PreparedStatement p,InventoryItem i)throws SQLException{p.setString(1,i.getName());p.setString(2,i.getCategory());p.setInt(3,i.getQuantity());p.setString(4,i.getUnit());p.setString(5,i.getSupplier());p.setDouble(6,i.getUnitPrice());p.setString(7,i.getExpirationDate());p.setInt(8,i.getMinimumStock());}
+  private InventoryItem map(ResultSet r)throws SQLException{return new InventoryItem(r.getInt("id"),r.getString("name"),r.getString("category"),r.getInt("quantity"),r.getString("unit"),r.getString("supplier"),r.getDouble("unit_price"),r.getString("expiration_date"),r.getInt("minimum_stock"));}
+}
